@@ -1,0 +1,35 @@
+# Portfolio Lab — dependencias runtime
+# Pins ~= (compatible release) en versiones probadas a 2026-05.
+# Para reproducir el entorno exacto: pip install -r requirements.txt
+
+# --- Core ---
+numpy>=2.0,<3.0
+pandas>=2.2,<4.0
+scipy>=1.13,<2.0
+requests>=2.31,<3.0
+
+# --- Datos de mercado ---
+yfinance>=0.2.50,<2.0
+
+# --- Análisis estadístico / ML ---
+scikit-learn>=1.5,<2.0
+statsmodels>=0.14,<1.0
+
+# --- Visualización ---
+matplotlib>=3.8,<4.0
+
+# --- Escáner de asimetría positiva (asymmetric/) ---
+pyarrow>=15.0              # caché parquet de precios, fundamentales y resultados
+tabulate>=0.9              # tabla del top por consola
+
+# --- Scanner de cripto (menú X) ---
+# El scan arranca sin ninguna de estas: cada una cubre un trozo del score
+# y lo que falte se marca como no medido. `utils/dependencies.py` las
+# instala sola la primera vez que hacen falta.
+vaderSentiment>=3.3,<4.0   # análisis de sentimiento (léxico incluido)
+feedparser>=6.0,<7.0       # feeds RSS de noticias cripto
+# praw>=7.7,<8.0           # Reddit (necesita credenciales de app)
+
+# --- Opcionales (descomentar si se usan) ---
+# cvxpy>=1.5,<2.0   # optimización convexa
+# hmmlearn>=0.3,<1.0  # alternativa al HMM propio
