@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Cancela runs anteriores del mismo branch (ahorra minutos en CI).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pytest + coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio_lab
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: portfolio_lab
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+          cache-dependency-path: |
+            portfolio_lab/requirements.txt
+            portfolio_lab/requirements-dev.txt
+            portfolio_lab/pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install -e .
+
+      # Excluye test_integration.py — depende de yfinance/Yahoo Finance (red).
+      # En CI corremos solo el subconjunto que no sale del proceso.
+      - name: Run tests with coverage
+        run: |
+          pytest tests \
+            --ignore=tests/test_integration.py \
+            --cov=portfolio_lab \
+            --cov-config=pyproject.toml \
+            --cov-report=term-missing:skip-covered \
+            --cov-report=xml \
+            --cov-fail-under=40
+
+      - name: Upload coverage XML
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: portfolio_lab/coverage.xml
+          retention-days: 7
+
+  lint:
+    name: flake8 (paquete completo)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio_lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: portfolio_lab
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: portfolio_lab/requirements-dev.txt
+
+      - name: Install flake8
+        run: pip install "flake8>=7.0,<8.0"
+
+      # Todo el paquete, ui/ incluido desde Sprint 12.3 — los últimos 4 bugs
+      # de producción eran NameErrors en ui/ que F821 habría atrapado.
+      # Ver .flake8 para reglas (select de errores funcionales).
+      - name: Run flake8
+        run: flake8 .
