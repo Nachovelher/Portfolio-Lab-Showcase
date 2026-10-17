@@ -5,11 +5,12 @@
 [![Scale](https://img.shields.io/badge/codebase-~104.000%20LOC%20%7C%20247%20modules-informational.svg)](#%EF%B8%8F-arquitectura-del-proyecto)
 [![Tests](https://img.shields.io/badge/tests-~2.000%20passed%20%28pytest%29-brightgreen.svg)](samples/conftest.py)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Side Project](https://img.shields.io/badge/project-personal%20side--project-8a2be2.svg)](#)
 
 > [!IMPORTANT]
 > **🔒 Nota sobre Propiedad Intelectual y Muestras de Código (*Code Samples*)**
 >
-> Por motivos de protección de propiedad intelectual y modelos cuantitativos propietarios (*alpha*), el código fuente completo de **Portfolio Lab** (**~104.000 líneas de código en 247 módulos Python y +2.000 tests unitarios**) se mantiene en un repositorio privado (Nachovelher/Portfolio_lab).
+> **Portfolio Lab** es un ***side-project* personal e independiente de I+D cuantitativa**. Por motivos de protección de propiedad intelectual y modelos cuantitativos propietarios (*alpha*), el código fuente completo (**~104.000 líneas de código en 247 módulos Python y +2.000 tests unitarios**) se mantiene en un repositorio privado (Nachovelher/Portfolio_lab).
 >
 > Este repositorio público actúa como **escaparate técnico y de arquitectura** e incluye:
 > - La documentación completa de ingeniería, diseño de módulos y metodología cuantitativa.
