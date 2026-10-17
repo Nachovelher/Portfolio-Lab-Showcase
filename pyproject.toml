@@ -1,0 +1,110 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "portfolio-lab"
+version = "3.0.0"
+description = "Scanner global + análisis fundamental + optimización + backtest cuantitativo"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Nacho Velhert" }]
+
+dependencies = [
+    "numpy>=2.0,<3.0",
+    "pandas>=2.2,<4.0",
+    "scipy>=1.13,<2.0",
+    "requests>=2.31,<3.0",
+    "yfinance>=0.2.50,<2.0",
+    "scikit-learn>=1.5,<2.0",
+    "statsmodels>=0.14,<1.0",
+    "matplotlib>=3.8,<4.0",
+    "pyarrow>=15.0",
+    "tabulate>=0.9",
+    "vaderSentiment>=3.3,<4.0",
+    "feedparser>=6.0,<7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<10.0",
+    "pytest-cov>=5.0,<7.0",
+    "pytest-mock>=3.12,<4.0",
+    "flake8>=7.0,<8.0",
+]
+optim = [
+    "cvxpy>=1.5,<2.0",
+]
+quant = [
+    "arch>=7.0,<8.0",        # GARCH
+    "hmmlearn>=0.3,<1.0",    # HMM alternativo al propio
+]
+reports = [
+    "reportlab>=4.0,<5.0",   # Generación de PDFs
+]
+econ = [
+    "fredapi>=0.5,<1.0",     # FRED economic data
+]
+crypto = [
+    "vaderSentiment>=3.3,<4.0",  # sentimiento, léxico dentro del paquete
+    "feedparser>=6.0,<7.0",      # RSS de CoinDesk, Cointelegraph...
+    "praw>=7.7,<8.0",            # Reddit (requiere credenciales)
+]
+
+[project.scripts]
+portfolio-lab = "portfolio_lab.main:main"
+
+[tool.setuptools]
+packages = [
+    "portfolio_lab",
+    "portfolio_lab.analysis",
+    "portfolio_lab.asymmetric",
+    "portfolio_lab.crypto",
+    "portfolio_lab.data",
+    "portfolio_lab.fallen",
+    "portfolio_lab.herramientas",
+    "portfolio_lab.portfolio",
+    "portfolio_lab.recien",
+    "portfolio_lab.scanner",
+    "portfolio_lab.shrinkers",
+    "portfolio_lab.ui",
+    "portfolio_lab.utils",
+    "portfolio_lab.validaciones",
+]
+
+[tool.setuptools.package-dir]
+portfolio_lab = "."
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning",
+]
+
+[tool.coverage.run]
+source = ["portfolio_lab"]
+branch = false
+omit = [
+    # UI: menús interactivos con input(), no se testean en CI
+    "portfolio_lab/ui/*",
+    # Charts: lógica de matplotlib, sin valor de cobertura
+    "portfolio_lab/ui/charts*.py",
+    # Tests propios y __main__
+    "portfolio_lab/tests/*",
+    "portfolio_lab/__main__.py",
+]
+
+[tool.coverage.report]
+# Líneas a no contar como "no cubiertas":
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+show_missing = true
+skip_covered = true
+precision = 1
